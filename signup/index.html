@@ -10,7 +10,7 @@
 <body>
     <div class="container mt-4 ">
         <div class="form-container bg-warning">
-        <form action="" class="form p-2" id="signupform"> 
+        <form action="" class="form p-2" id="signupform" > 
             <div class="row mt-1">
                 <div class="col-1">
                     <label for="name" class="form-label">Name:</label>
@@ -24,7 +24,7 @@
                 <label for="email" >Email:</label>
             </div>
             <div class="col-auto">
-                <input type="email" id="email" class="form-control" placeholder="username@xyz" required>
+                <input type="email" autocomplete="email" id="email" class="form-control" placeholder="username@xyz" required>
             </div>
         </div>
         <div class="row mt-2">
@@ -32,7 +32,7 @@
                 <label for="password">Password:</label>
             </div>
             <div class="col-auto">
-                <input type="password"  id="password" class="form-control" required>
+                <input type="password"   id="password" class="form-control" autocomplete="current-password" minlength="4" required>
             </div>
         </div>
             <div class="mt-3">

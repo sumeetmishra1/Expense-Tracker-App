@@ -12,10 +12,14 @@ e.preventDefault();
     }
     try{
         const user=await axios.post('http://localhost:3000/user/signup',obj)
-        console.log(user.data);
+        console.log(user.data.newUser);
     }
     catch(e){
-        console.log(e);
+        console.log(e.response.data.err);
+        const childhtml=`<h3>${e.response.data.err}</h3>`
+        SignUpForm.innerHTML=SignUpForm.innerHTML+childhtml;
     }
-    
+    newname.value="";
+    email.value="";
+    password.value="";
 }
