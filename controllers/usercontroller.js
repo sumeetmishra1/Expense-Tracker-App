@@ -1,5 +1,11 @@
 const User=require('../models/newuser');
 const bcrypt=require('bcrypt');
+const jwt=require('jsonwebtoken');
+
+
+function createToken(id,name){
+    return jwt.sign({userId:id,name:name},'secretkey')
+}
 exports.addNewUser = async(req,res,next)=>{
     const name=req.body.name;
     const email=req.body.email;
@@ -37,7 +43,7 @@ exports.loginUser=async(req,res,next)=>{
                 res.status(500).json({message:"Something went Wrong"});
             }
             if(result==true){
-                res.status(200).json({message:"User Login Sucessfull!"});
+                res.status(200).json({message:"User Login Sucessfull!",token: createToken(user[0].id,user[0].name)});
             }
             else{
                 res.status(401).json({message:"Password is incorrect"});

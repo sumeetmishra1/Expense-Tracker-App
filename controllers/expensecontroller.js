@@ -1,6 +1,6 @@
 const expense=require('../models/expenses');
 exports.getexpense=async(req,res,next)=>{
-    const data=await expense.findAll();
+    const data=await expense.findAll({where:{userId:req.user.id}});
     res.status(200).json({allExpense:data});
 
 }
