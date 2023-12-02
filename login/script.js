@@ -1,6 +1,7 @@
 const LoginForm = document.querySelector("#loginform");
 const email=document.querySelector("#email");
 const password=document.querySelector("#password");
+const formbody=document.querySelector("#form-body");
 LoginForm.addEventListener('submit',LoginUser);
 async function LoginUser(e){
     e.preventDefault();
@@ -9,11 +10,16 @@ async function LoginUser(e){
         password:password.value
     }
     try{
-        const User=await axios.post('http://localhost:3000/user/signup',obj)
-        window.alert("User logged in Succesfully")
+        const User=await axios.post('http://localhost:3000/user/login',obj)
+        console.log(User.data.message)
+        window.alert(User.data.message);
+        localStorage.setItem('token',User.data.token);
+        window.location.href="../Expenses/index.html";
     }
     catch(e){
-        window.alert("Invalid Credentials!")
+        //console.log(e.response.data.err);
+        formbody.innerHTML+=`<h3>${e.message}</h3>`;
+    
     }
     email.value="";
     password.value="";
