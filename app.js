@@ -3,7 +3,8 @@ const cors = require('cors');
 const bodyparser=require('body-parser');
 const userroutes=require('./routes/userroutes');
 const expenseroutes=require('./routes/expenseroutes');
-const purchaseroute=require('./routes/purchaseroutes')
+const purchaseroute=require('./routes/purchaseroutes');
+const premiumroute=require('./routes/premiumroutes')
 const sequelize=require('./utils/database');
 const expense=require('./models/expenses');
 const User=require('./models/newuser');
@@ -14,6 +15,7 @@ app.use(bodyparser.json({extended:false}));
 app.use('/user',userroutes);
 app.use('/expenses',expenseroutes);
 app.use('/purchase',purchaseroute);
+app.use('/premium',premiumroute);
 User.hasMany(expense);
 expense.belongsTo(User);
 
