@@ -4,7 +4,8 @@ const bodyparser=require('body-parser');
 const userroutes=require('./routes/userroutes');
 const expenseroutes=require('./routes/expenseroutes');
 const purchaseroute=require('./routes/purchaseroutes');
-const premiumroute=require('./routes/premiumroutes')
+const premiumroute=require('./routes/premiumroutes');
+const passwordroute=require('./routes/passwordroutes');
 const sequelize=require('./utils/database');
 const expense=require('./models/expenses');
 const User=require('./models/newuser');
@@ -16,6 +17,7 @@ app.use('/user',userroutes);
 app.use('/expenses',expenseroutes);
 app.use('/purchase',purchaseroute);
 app.use('/premium',premiumroute);
+app.use('/password',passwordroute);
 User.hasMany(expense);
 expense.belongsTo(User);
 
