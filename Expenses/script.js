@@ -5,6 +5,7 @@ const catgory=document.querySelector("#category");
 const lists=document.querySelector("#items");
 const razorpay=document.querySelector('#rzp-1');
 const premium=document.querySelector('#premium');
+const premiumleaderboard=document.querySelector('#leaderboard')
 form.addEventListener('submit',onsubmit);
 function onsubmit(e){
     let myoj={
@@ -29,6 +30,7 @@ function deletefn(userid){
     const token=localStorage.getItem('token');
     axios.delete(`http://localhost:3000/expenses/delete/${userid}`,{headers:{"Authorization":token}})
             .then((response)=>{
+                console.log(response);
               removeuserfromscreen(userid)
             })
             .catch(err=>console.log(err.message));     
@@ -45,7 +47,9 @@ window.addEventListener("DOMContentLoaded",()=>{
     .then((res)=>{
         if(res.data.ispremium){
             razorpay.remove();
-            premium.innerHTML+='<h3 class="text-success">You are a Premium User!</h3>';
+            premium.innerHTML+=`<h3 class="text-success">You are a Premium User!</h3>
+             <button onclick="showleaderboad()" class="btn btn-primary ms-2">Show LeaderBoard</button>
+             <button onclick="window.location.href=`../Expense-Report/index.html`" class="btn btn-primary ms-2">Expense Report</button>`
         }
         for(var i=0;i<res.data.allExpense.length;i++){
             showonscreen(res.data.allExpense[i]);
@@ -89,5 +93,19 @@ razorpay.onclick=async(e)=>{
     rzp1.on('payment.failed',function(response){
         console.log(response);
         alert("Something Went Wrong");
+    })
+}
+async function  showleaderboad (){
+    while(premiumleaderboard.firstChild){
+        premiumleaderboard.removeChild(premiumleaderboard.firstChild)
+    }
+    const token=localStorage.getItem('token');
+   const userlist= await axios.get('http://localhost:3000/premium/showleaderboard',{headers:{"Authorization":token}});
+    premiumleaderboard.innerHTML+='<h3>Leaderboard</h3>'
+    console.log(userlist)
+    const userleaderboard=userlist.data.leaderboard;
+    userleaderboard.forEach((user)=>{
+        const childHTML=`<li class='list-group-item'>Name-${user.name} Total Expenses-${user.totalExpense}</li>`;
+        premiumleaderboard.innerHTML+=childHTML;
     })
 }
