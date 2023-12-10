@@ -5,7 +5,8 @@ const catgory=document.querySelector("#category");
 const lists=document.querySelector("#items");
 const razorpay=document.querySelector('#rzp-1');
 const premium=document.querySelector('#premium');
-const premiumleaderboard=document.querySelector('#leaderboard')
+const premiumleaderboard=document.querySelector('#leaderboard');
+const prevdownload=document.querySelector('#prevdownload');
 form.addEventListener('submit',onsubmit);
 function onsubmit(e){
     let myoj={
@@ -49,7 +50,7 @@ window.addEventListener("DOMContentLoaded",()=>{
             razorpay.remove();
             premium.innerHTML+=`<h3 class="text-success">You are a Premium User!</h3>
              <button onclick="showleaderboad()" class="btn btn-primary ms-2">Show LeaderBoard</button>
-             <button onclick="window.location.href=`../Expense-Report/index.html`" class="btn btn-primary ms-2">Expense Report</button>`
+             <button onclick="showreport()" class="btn btn-primary ms-2">Expense Report</button>`
         }
         for(var i=0;i<res.data.allExpense.length;i++){
             showonscreen(res.data.allExpense[i]);
@@ -108,4 +109,41 @@ async function  showleaderboad (){
         const childHTML=`<li class='list-group-item'>Name-${user.name} Total Expenses-${user.totalExpense}</li>`;
         premiumleaderboard.innerHTML+=childHTML;
     })
+}
+
+function showreport(){
+    window.location.href="../Expense-Report/index.html"
+}
+async function  downloadexpense(){
+    const token=localStorage.getItem('token');
+   const data = await axios.get('http://localhost:3000/expenses/download',{headers:{"Authorization":token}});
+   if(data.status==200){
+    var a = document.createElement('a');
+    a.href=data.data.fileUrl;
+    a.download='myexpense.csv';
+    a.click();
+   }
+   else{
+    console.log(err)
+   }
+}
+async function getdownloads(){
+    try{
+    const token=localStorage.getItem('token');
+    const downloads=await axios.get('http://localhost:3000/expenses/get-downloads',{headers:{"Authorization":token}})
+    prevdownload.innerHTML+='<h3>Previous Downloads</h3>'
+    for(var i=0;i<downloads.data.allDownloads.length;i++){
+        
+       showdownloadsonscreen(downloads.data.allDownloads[i]);
+    }
+    }
+    catch(e){
+        console.log(e);
+    }
+}
+function showdownloadsonscreen(array){
+    const fileUrl=array.fileUrl;
+    const date=array.createdAt;
+    const childHTML=`<li class='list-group-item'><a href="${fileUrl}">${date}<a></li>`
+    prevdownload.innerHTML+=childHTML;
 }
