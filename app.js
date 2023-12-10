@@ -10,7 +10,9 @@ const sequelize=require('./utils/database');
 const expense=require('./models/expenses');
 const User=require('./models/newuser');
 const Order = require('./models/purchases');
+const Download=require('./models/downloads');
 const app=express();
+require('dotenv').config();
 app.use(cors());
 app.use(bodyparser.json({extended:false}));
 app.use('/user',userroutes);
@@ -23,6 +25,9 @@ expense.belongsTo(User);
 
 User.hasMany(Order);
 Order.belongsTo(User);
+
+User.hasMany(Download);
+Download.belongsTo(User);
 
 sequelize.sync().then(res=>{
     app.listen(3000);

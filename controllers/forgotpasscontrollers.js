@@ -4,12 +4,16 @@ const bcrypt=require('bcrypt');
 const {v4 : uuidv4 }=require('uuid');
 const User=require('../models/newuser');
 const Passwordmodel=require('../models/forgotpassmodel');
+const sequelize=require('../utils/database');
 exports.forgotpassword=async(req,res,next)=>{
     //Generating Reset Link
     const useremail=req.body.email;
     const uniqueId=uuidv4();
+    const t = await sequelize.transaction();
+
     try{
-        const user= await User.findOne({where:{email:useremail}});
+        const user= await User.findOne({where:{email:useremail}},{transaction:t});
+
         if(!user){
            return res.status(404).json({message:"User not Found"});
         }
@@ -18,20 +22,17 @@ exports.forgotpassword=async(req,res,next)=>{
                 id:uniqueId,
                 isActive:true,
                 userId:user.id
-            })
-        }
-    }
-    catch(e){
-        console.log(password);
-        res.status(500).json({message:e});
-    } 
+            },{transaction:t})
+
 
     //Email sending Process
+
+
     const path=`http://localhost:3000/password/verifyLink/${uniqueId}`;
     const client= Sib.ApiClient.instance;
     var apiKey= client.authentications['api-key'];
     const tranEmailApi = new Sib.TransactionalEmailsApi();
-    apiKey.apiKey=`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`;
+    apiKey.apiKey=process.env.API_KEY;
     const sender={
         email:'sumitsfs0@gmail.com'
     };
@@ -40,20 +41,22 @@ exports.forgotpassword=async(req,res,next)=>{
             email:useremail
         }
     ]
-    try{
     await tranEmailApi.sendTransacEmail({
         sender,
         to:receivers,
         subject:'Forgot Password',
         htmlContent:`<a href="${path}">Click here</a> to reset your Password`
     });
+    await t.commit();
     console.log("donneeeeee");
     return res.status(200).json({message:'done'});
+
+    }
     }
     catch(e){
-        console.log(e.message);
-    }
-    
+        await t.rollback();
+        res.status(500).json({message:e});
+    } 
 }
 exports.verifyPasswordLink=async(req,res,next)=>{
     const uuid=req.params.uniqueId;
@@ -77,11 +80,19 @@ exports.verifyPasswordLink=async(req,res,next)=>{
    }
 }
 exports.setnewpassword=async(req,res,next)=>{
-   const user=await Passwordmodel.findOne({where:{id:req.body.uuid}});
-   await user.update({isActive:false});
-   const saltrounds=10;
-    bcrypt.hash(req.body.password,saltrounds,async(err,hash)=>{
-    const updateduser=await User.update({password:hash},{where:{id:user.userId}});
-    res.status(200).json({new:updateduser});
-    })
+    const t = await sequelize.transaction();
+    try{
+        const user=await Passwordmodel.findOne({where:{id:req.body.uuid}},{transaction:t});
+        await user.update({isActive:false},{transaction:t});
+        const saltrounds=10;
+        bcrypt.hash(req.body.password,saltrounds,async(err,hash)=>{
+            const updateduser=await User.update({password:hash},{where:{id:user.userId}},{transaction:t});
+            await t.commit();
+            res.status(200).json({new:updateduser});
+            })
+    }
+    catch(e){
+        await t.rollback();
+        res.status(400).json({e});
+    }
 }
