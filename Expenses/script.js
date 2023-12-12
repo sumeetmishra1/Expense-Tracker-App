@@ -7,6 +7,7 @@ const razorpay=document.querySelector('#rzp-1');
 const premium=document.querySelector('#premium');
 const premiumleaderboard=document.querySelector('#leaderboard');
 const prevdownload=document.querySelector('#prevdownload');
+const pagination =document.querySelector('#pagination');
 form.addEventListener('submit',onsubmit);
 function onsubmit(e){
     let myoj={
@@ -42,22 +43,27 @@ function removeuserfromscreen(userid){
            lists.removeChild(childnodedelt);
     }
 }
-window.addEventListener("DOMContentLoaded",()=>{
+window.addEventListener("DOMContentLoaded",getexpenses(1));
+async function getexpenses(page){
     const token=localStorage.getItem('token');
-    axios.get("http://localhost:3000/expenses/getexpense",{headers:{"Authorization":token}})
+    const lim=document.querySelector('#paginationrows').value;
+    axios.get(`http://localhost:3000/expenses/getexpense?page=${page}&lim=${lim}`,{headers:{"Authorization":token}})
     .then((res)=>{
         if(res.data.ispremium){
             razorpay.remove();
+            premium.innerHTML='';
             premium.innerHTML+=`<h3 class="text-success">You are a Premium User!</h3>
              <button onclick="showleaderboad()" class="btn btn-primary ms-2">Show LeaderBoard</button>
              <button onclick="showreport()" class="btn btn-primary ms-2">Expense Report</button>`
         }
+        lists.innerHTML='';
         for(var i=0;i<res.data.allExpense.length;i++){
             showonscreen(res.data.allExpense[i]);
         }
+        showpagination(res.data)
     } )
     .catch(err=>console.log(err));
-})
+}
 
 function showonscreen(obj){
     let amt=obj.amount
@@ -146,4 +152,18 @@ function showdownloadsonscreen(array){
     const date=array.createdAt;
     const childHTML=`<li class='list-group-item'><a href="${fileUrl}">${date}<a></li>`
     prevdownload.innerHTML+=childHTML;
+}
+function showpagination(response){
+    pagination.innerHTML=''
+    const currpage=response.currPage
+    if(!response.hasPreviousPage){
+        pagination.innerHTML+=`${currpage}-<button class="btn btn-success" onclick="getexpenses(${currpage+1})">Next</button>`;
+    }
+    else if(!response.hasLastPage){
+        pagination.innerHTML+=`<button  class="btn btn-success" onclick="getexpenses(${currpage-1})">Prev</button>-${currpage}`
+    }
+    else{
+        pagination.innerHTML+=`<button  class="btn btn-success" onclick="getexpenses(${currpage-1})">Prev</button>-${currpage}-<button class="btn btn-success" onclick="getexpenses(${currpage+1})">Next</button>`;
+    }
+    
 }
