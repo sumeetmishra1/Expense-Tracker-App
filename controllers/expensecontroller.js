@@ -25,8 +25,20 @@ exports.getlistofdownloads=async(req,res)=>{
     res.status(200).json({allDownloads:item});
 }
 exports.getexpense=async(req,res,next)=>{
-    const data=await expense.findAll({where:{userId:req.user.id}});
-    res.status(200).json({allExpense:data,ispremium:req.user.ispremiuimuser});
+    const page = +req.query.page||1;
+    const Itemslim=+req.query.lim;
+    const data=await expense.findAll({
+        where:{userId:req.user.id},
+        offset:(page-1)*Itemslim,
+        limit:Itemslim
+    });
+    res.status(200).json({
+        allExpense:data,
+        ispremium:req.user.ispremiuimuser,
+        currPage:page,
+        hasPreviousPage:page>1,
+        hasLastPage:data.length>1
+    });
 }
 exports.addexpense=async(req,res,next)=>{
     const t = await sequelize.transaction();
