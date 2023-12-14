@@ -1,5 +1,7 @@
 const express=require('express');
 const cors = require('cors');
+const fs=require('fs');
+const path =require('path');
 const bodyparser=require('body-parser');
 const userroutes=require('./routes/userroutes');
 const expenseroutes=require('./routes/expenseroutes');
@@ -12,9 +14,17 @@ const User=require('./models/newuser');
 const Order = require('./models/purchases');
 const Download=require('./models/downloads');
 const app=express();
+const helmet=require('helmet');
+const morgan=require('morgan')
 require('dotenv').config();
 app.use(cors());
 app.use(bodyparser.json({extended:false}));
+app.use(helmet());
+const accessLogStream=fs.createWriteStream(
+    path.join(__dirname,'access.log'),
+    {flags:'a'}
+)
+app.use(morgan('combined',{stream:accessLogStream}));
 app.use('/user',userroutes);
 app.use('/expenses',expenseroutes);
 app.use('/purchase',purchaseroute);

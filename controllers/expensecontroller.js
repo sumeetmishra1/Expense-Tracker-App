@@ -26,7 +26,7 @@ exports.getlistofdownloads=async(req,res)=>{
 }
 exports.getexpense=async(req,res,next)=>{
     const page = +req.query.page||1;
-    const Itemslim=+req.query.lim;
+    const Itemslim=+req.query.lim||6;
     const data=await expense.findAll({
         where:{userId:req.user.id},
         offset:(page-1)*Itemslim,
