@@ -1,6 +1,7 @@
 const Sequelize=require('sequelize');
-const sequelize= new Sequelize('expense-tracker','root','sumit@1234',{
+require('dotenv').config();
+const sequelize= new Sequelize(process.env.DB_NAME,process.env.SQL_USER_NAME,process.env.SQL_PASSWORD,{
     dialect:'mysql',
-    host:'localhost'
+    host:process.env.DB_HOST
 })
 module.exports=sequelize;
