@@ -4,7 +4,7 @@ const jwt=require('jsonwebtoken');
 
 
 function createToken(id,name){
-    return jwt.sign({userId:id,name:name},'secretkey')
+    return jwt.sign({userId:id,name:name},process.env.JWT_SECRET_KEY)
 }
 exports.addNewUser = async(req,res,next)=>{
     const name=req.body.name;
