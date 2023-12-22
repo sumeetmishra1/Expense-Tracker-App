@@ -6,7 +6,7 @@ function forgotpass(e){
     let myoj={
         email:email.value
     }
-    axios.post('http://localhost:3000/password/forgotpassword',myoj)
+    axios.post('http://16.171.15.121:3000/password/forgotpassword',myoj)
     .then((res)=>{
         alert("Reset link Successfully Send on Your Email");
         window.location.href="../login/index.html";

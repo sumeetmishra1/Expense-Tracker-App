@@ -17,7 +17,7 @@ function onsubmit(e){
     };
     e.preventDefault();
     const token=localStorage.getItem('token');
-    axios.post('http://localhost:3000/expenses/addexpense',myoj,{headers:{"Authorization":token}})
+    axios.post('http://16.171.15.121:3000/expenses/addexpense',myoj,{headers:{"Authorization":token}})
     .then(res=>{
         showonscreen(res.data.newExpense);
     })
@@ -30,7 +30,7 @@ function onsubmit(e){
 function deletefn(userid){
     console.log(userid)
     const token=localStorage.getItem('token');
-    axios.delete(`http://localhost:3000/expenses/delete/${userid}`,{headers:{"Authorization":token}})
+    axios.delete(`http://16.171.15.121:3000/expenses/delete/${userid}`,{headers:{"Authorization":token}})
             .then((response)=>{
                 console.log(response);
               removeuserfromscreen(userid)
@@ -47,7 +47,7 @@ window.addEventListener("DOMContentLoaded",getexpenses(1));
 async function getexpenses(page){
     const token=localStorage.getItem('token');
     const lim=document.querySelector('#paginationrows').value;
-    axios.get(`http://localhost:3000/expenses/getexpense?page=${page}&lim=${lim}`,{headers:{"Authorization":token}})
+    axios.get(`http://16.171.15.121:3000/expenses/getexpense?page=${page}&lim=${lim}`,{headers:{"Authorization":token}})
     .then((res)=>{
         if(res.data.ispremium){
             razorpay.remove();
@@ -79,14 +79,14 @@ razorpay.onclick=async(e)=>{
     console.log("clicked")
     e.preventDefault();
     const token=localStorage.getItem('token');
-    const response= await axios.get('http://localhost:3000/purchase/premiummembership',{headers:{"Authorization":token}})
+    const response= await axios.get('http://16.171.15.121:3000/purchase/premiummembership',{headers:{"Authorization":token}})
     console.log(response);
     var options=
     {
         "key":response.data.key_id,
         "order_id":response.data.order.id,
         "handler":async function(response){
-            await axios.post('http://localhost:3000/purchase/updatetransactionstatus',{
+            await axios.post('http://16.171.15.121:3000/purchase/updatetransactionstatus',{
                 order_id:options.order_id,
                 payment_id:response.razorpay_payment_id,
             },{headers:{"Authorization":token}})
@@ -107,7 +107,7 @@ async function  showleaderboad (){
         premiumleaderboard.removeChild(premiumleaderboard.firstChild)
     }
     const token=localStorage.getItem('token');
-   const userlist= await axios.get('http://localhost:3000/premium/showleaderboard',{headers:{"Authorization":token}});
+   const userlist= await axios.get('http://16.171.15.121:3000/premium/showleaderboard',{headers:{"Authorization":token}});
     premiumleaderboard.innerHTML+='<h3>Leaderboard</h3>'
     console.log(userlist)
     const userleaderboard=userlist.data.leaderboard;
@@ -122,7 +122,7 @@ function showreport(){
 }
 async function  downloadexpense(){
     const token=localStorage.getItem('token');
-   const data = await axios.get('http://localhost:3000/expenses/download',{headers:{"Authorization":token}});
+   const data = await axios.get('http://16.171.15.121:3000/expenses/download',{headers:{"Authorization":token}});
    if(data.status==200){
     var a = document.createElement('a');
     a.href=data.data.fileUrl;
@@ -136,7 +136,7 @@ async function  downloadexpense(){
 async function getdownloads(){
     try{
     const token=localStorage.getItem('token');
-    const downloads=await axios.get('http://localhost:3000/expenses/get-downloads',{headers:{"Authorization":token}})
+    const downloads=await axios.get('http://16.171.15.121:3000/expenses/get-downloads',{headers:{"Authorization":token}})
     prevdownload.innerHTML+='<h3>Previous Downloads</h3>'
     for(var i=0;i<downloads.data.allDownloads.length;i++){
         
