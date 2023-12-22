@@ -14,22 +14,25 @@ const User=require('./models/newuser');
 const Order = require('./models/purchases');
 const Download=require('./models/downloads');
 const app=express();
-const helmet=require('helmet');
-const morgan=require('morgan')
+//const helmet=require('helmet');
+//const morgan=require('morgan')
 require('dotenv').config();
 app.use(cors());
 app.use(bodyparser.json({extended:false}));
-app.use(helmet());
+//app.use(helmet())
 const accessLogStream=fs.createWriteStream(
     path.join(__dirname,'access.log'),
     {flags:'a'}
 )
-app.use(morgan('combined',{stream:accessLogStream}));
+//app.use(morgan('combined',{stream:accessLogStream}));
 app.use('/user',userroutes);
 app.use('/expenses',expenseroutes);
 app.use('/purchase',purchaseroute);
 app.use('/premium',premiumroute);
 app.use('/password',passwordroute);
+app.use((req,res)=>{
+    res.sendFile(path.join(__dirname,`Expense-Trackerfrntend/${req.url}`))
+})
 User.hasMany(expense);
 expense.belongsTo(User);
 
