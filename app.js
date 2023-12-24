@@ -31,6 +31,7 @@ app.use('/purchase',purchaseroute);
 app.use('/premium',premiumroute);
 app.use('/password',passwordroute);
 app.use((req,res)=>{
+    console.log('runned');
     res.sendFile(path.join(__dirname,`Expense-Trackerfrntend/${req.url}`))
 })
 User.hasMany(expense);
