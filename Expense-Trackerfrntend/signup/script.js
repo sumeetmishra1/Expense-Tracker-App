@@ -11,7 +11,7 @@ e.preventDefault();
         password:password.value
     }
     try{
-        const user=await axios.post('http://16.171.15.121:3000/user/signup',obj)
+        const user=await axios.post('http://51.20.12.176:3000/user/signup',obj)
         window.alert("User Created!")
         location.replace('/login/index.html')
     }

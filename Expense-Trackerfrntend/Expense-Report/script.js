@@ -7,7 +7,7 @@ const year=date.getFullYear();
 const yearhead=document.querySelector('#year').innerHTML=`Year - ${year}`
 const monthhead=document.querySelector('#month').innerHTML=`${month}-${year}`
 const token=localStorage.getItem('token');
-  const expense = await  axios.get("http://16.171.15.121:3000/expenses/getexpense",{headers:{"Authorization":token}})
+  const expense = await  axios.get("http://51.20.12.176:3000/expenses/getexpense",{headers:{"Authorization":token}})
   const allexpense=expense.data.allExpense;
   let totalExpense=0;
     for(var i=0;i<allexpense.length;i++){
