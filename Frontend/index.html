@@ -23,11 +23,11 @@
             uuid:uuid,
             password:password.value
         }
-        axios.post('http://localhost:3000/password/setnewpassword',obj)
+        axios.post('/password/setnewpassword',obj)
         .then(res=>{
             console.log(res);
             alert("Password Succesfully changed")
-            window.location.href="http://localhost:3000/login/index.html";
+            window.location.href="/login/index.html";
         })
         .catch((err)=>{
             alert(err.message)

@@ -24,6 +24,7 @@ app.use('/expenses', expenseroutes);
 app.use('/purchase', purchaseroute);
 app.use('/premium', premiumroute);
 app.use('/password', passwordroute);
+
 app.use((req, res) => {
     if (req.url === '/') {
         res.sendFile(path.join(__dirname, `Expense-Trackerfrntend/Frontintro/index.html`))

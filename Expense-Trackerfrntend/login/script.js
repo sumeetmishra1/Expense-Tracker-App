@@ -10,7 +10,7 @@ async function LoginUser(e){
         password:password.value
     }
     try{
-        const User=await axios.post('http://localhost:3000/user/login',obj)
+        const User=await axios.post('/user/login',obj)
         console.log(User.data.message)
         window.alert(User.data.message);
         localStorage.setItem('token',User.data.token);

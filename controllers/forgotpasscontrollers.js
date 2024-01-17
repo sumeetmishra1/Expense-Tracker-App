@@ -26,7 +26,7 @@ exports.forgotpassword=async(req,res,next)=>{
     //Email sending Process
 
 
-    const path=`http://localhost:3000/password/verifyLink/${uniqueId}`;
+    const path=`/password/verifyLink/${uniqueId}`;
     const client= Sib.ApiClient.instance;
     var apiKey= client.authentications['api-key'];
     const tranEmailApi = new Sib.TransactionalEmailsApi();
