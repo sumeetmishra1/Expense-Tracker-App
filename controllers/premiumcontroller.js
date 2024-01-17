@@ -1,13 +1,11 @@
-const Expenses=require('../models/expenses');
-const User=require("../models/newuser");
-const sequelize = require('../utils/database');
+
+const User=require("../models/user");
 
 exports.getleaderboard=async(req,res,next)=>{
     try{
-        const leaderboard=await User.findAll({
-            attributes:['id','name','totalExpense'],
-            order:[['totalExpense','DESC']]
-        });
+       const leaderboard= await User.find()
+        .select('id name totalExpense')
+        .sort({ totalExpense: -1 })
         res.status(200).json({leaderboard:leaderboard});
     }
     catch(e){

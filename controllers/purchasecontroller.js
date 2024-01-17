@@ -1,5 +1,5 @@
-const Order=require('../models/purchases');
-const User=require('../models/newuser');
+const Order=require('../models/purchase');
+const User=require('../models/user');
 const Razorpay=require('razorpay');
 exports.purchasepremium=async(req,res)=>{
     try{
@@ -12,7 +12,12 @@ exports.purchasepremium=async(req,res)=>{
             if(err){
                 throw new Error(JSON.stringify(err));
             }
-            req.user.createOrder({orderId:order.id,status:'PENDING'})
+            const purchase=new Order({
+                orderId:order.id,
+                status:'PENDING',
+                userId:req.user._id
+            })
+            purchase.save()
             .then(()=>{
                 return res.status(201).json({order,key_id : rzp.key_id});
             })
@@ -30,15 +35,14 @@ exports.purchasepremium=async(req,res)=>{
 exports.updateTransactionstatus= async(req,res)=>{
     try{
         const{payment_id, order_id}=req.body;
-       const order= await Order.findOne({where:{orderId:order_id}})
-       const promise1 = order.update({paymentId:payment_id,status:'SUCCESSFULL'})
-       const promise2 =  req.user.update({ispremiuimuser:true});
-       Promise.all([promise1,promise2]).then(()=>{
+       const order= await Order.findOneAndUpdate({orderId:order_id},{
+            paymentId:payment_id,
+            status:'SUCCESSFULL'
+       })
+       await User.findByIdAndUpdate(req.user._id,{
+        ispremiuimuser:true
+       })
         return res.status(202).json({sucess:true,message:"Transaction Successfull"});
-       })
-       .catch((err)=>{
-        throw new Error(err);
-       })
     }
     catch(e){
         res.status(500).json({message:e});
