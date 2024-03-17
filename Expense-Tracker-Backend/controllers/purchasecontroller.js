@@ -7,7 +7,7 @@ exports.purchasepremium=async(req,res)=>{
             key_id:process.env.RZP_KEY_ID,
             key_secret:process.env.RZP_KEY_SECRET
         })
-        const amount=2500;
+        const amount=10000;
         rzp.orders.create({amount,currency:"INR"},(err,order)=>{
             if(err){
                 throw new Error(JSON.stringify(err));
