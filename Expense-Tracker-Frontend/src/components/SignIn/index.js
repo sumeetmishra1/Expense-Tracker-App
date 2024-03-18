@@ -12,7 +12,7 @@ import Container from '@mui/material/Container';
 
 
 
-export default function SignUp() {
+export default function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -38,21 +38,10 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Sign In
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} >
-                <TextField
-                  autoComplete="Name"
-                  name="Name"
-                  required
-                  fullWidth
-                  id="Name"
-                  label="Name"
-                  autoFocus
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -81,12 +70,12 @@ export default function SignUp() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              Sign In
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <NavLink to={"/signin"} variant="body2">
-                  Already have an account? Sign in
+                <NavLink to={'/signup'} variant="body2">
+                  Don't Have One? Sign in
                 </NavLink>
               </Grid>
             </Grid>
