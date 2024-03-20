@@ -3,10 +3,10 @@ import { Route } from "react-router-dom";
 import SignUp from "./pages/Signup";
 import SignIn from "./pages/Signin";
 import UserDetails from "./pages/UserDetails";
-import { ExpenseForm } from "./components/ExpensePage/ExpenseForm";
+import ExpensePage from "./pages/Expenses";
 function App() {
   return (
-    <div style={{background:' linear-gradient(to right, #3494e6, #ec6ead)',height:'100vh',marginTop:'0'}}>
+    <div style={{background:' linear-gradient(to right, #3494e6, #ec6ead)',height:'auto',marginTop:'0'}}>
       <BrandName/>
       <Route path="/signin">
       <SignIn/>
@@ -18,7 +18,7 @@ function App() {
         <UserDetails/>
       </Route>
       <Route path="/">
-        <ExpenseForm/>
+        <ExpensePage/>
       </Route>
       
     </div>
