@@ -72,10 +72,16 @@ export default function SignIn() {
             >
               Sign In
             </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <NavLink to={'/signup'} variant="body2">
+            <Grid container justifyContent="space-between">
+              <Grid item   >
+                <NavLink to={'/signup'} style={{color:'blue',textDecoration:'none'}} >
                   Don't Have One? Sign in
+                </NavLink>
+                
+              </Grid>
+              <Grid item >
+              <NavLink to={'/forgot-password'} style={{color:'red',textDecoration:'none'}} >
+                  Forgot Password?
                 </NavLink>
               </Grid>
             </Grid>
