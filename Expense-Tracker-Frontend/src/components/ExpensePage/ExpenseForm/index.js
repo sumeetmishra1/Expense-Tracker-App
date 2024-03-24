@@ -8,15 +8,50 @@ import {
   FormControl,
   Button,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { expenseActions } from "../../../store/Expense";
 
 export function ExpenseForm() {
+
   const [amountValue, setAmountValue] = useState("");
   const [descriptionValue, setDescriptionValue] = useState("");
   const [categoryValue, setCategoryValue] = useState("");
+  const [expenseId , setExpenseId] = useState(0)
+  const editExpense = useSelector((state) => state.expenses.expense)
+ 
+  const dispatch = useDispatch()
+
+  useEffect(()=>{
+    setAmountValue(editExpense.amount)
+    setCategoryValue(editExpense.category)
+    setDescriptionValue(editExpense.description)
+    setExpenseId(editExpense.id)
+  },[editExpense])
+    
+  
+  
+  
+  // if(editExpense){
+  //   setAmountValue(editExpense.amount)
+  //   setCategoryValue(editExpense.category)
+  //   setDescriptionValue(editExpense.description)
+  // }
+
   function handleFormSubmit() {
-    console.log(amountValue);
-    console.log(categoryValue)
+    const item = {
+      id:expenseId>0?expenseId:Math.random()*10+Math.random()*10,
+      amount:Number(amountValue),
+      description:descriptionValue,
+      category:categoryValue
+    }
+    dispatch(expenseActions.addExpense(item))
+    
+    setExpenseId(0)
+    setAmountValue('')
+    setCategoryValue('')
+    setDescriptionValue('')
+
   }
   return (
     <Container
