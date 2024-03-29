@@ -20,14 +20,18 @@ const expenseSlice = createSlice({
            state.totalAmount+=payload.amount
         },
         deleteExpense(state,{payload}){
-           state.expenses= state.expenses.filter((expense)=>expense.id !==payload)
+            console.log(payload)
+           state.expenses= state.expenses.filter((expense)=>expense._id !==payload)
            state.totalAmount-=payload.amount
         },
         editExpense(state,{payload}){
-            state.expenses = state.expenses.filter((expense)=>expense.id !==payload.id)
+            state.expenses = state.expenses.filter((expense)=>expense._id !==payload.id)
             state.totalAmount-=payload.amount
             state.expense=payload
         },
+        changeExpense(state,{payload}){
+            state.expenses =  [...payload]
+        }
     }
 })
 

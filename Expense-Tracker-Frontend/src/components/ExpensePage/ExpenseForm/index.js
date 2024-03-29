@@ -11,13 +11,13 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { expenseActions } from "../../../store/Expense";
+import axios from "axios";
 
 export function ExpenseForm() {
 
   const [amountValue, setAmountValue] = useState("");
   const [descriptionValue, setDescriptionValue] = useState("");
   const [categoryValue, setCategoryValue] = useState("");
-  const [expenseId , setExpenseId] = useState(0)
   const editExpense = useSelector((state) => state.expenses.expense)
  
   const dispatch = useDispatch()
@@ -26,7 +26,6 @@ export function ExpenseForm() {
     setAmountValue(editExpense.amount)
     setCategoryValue(editExpense.category)
     setDescriptionValue(editExpense.description)
-    setExpenseId(editExpense.id)
   },[editExpense])
     
   
@@ -40,14 +39,20 @@ export function ExpenseForm() {
 
   function handleFormSubmit() {
     const item = {
-      id:expenseId>0?expenseId:Math.random()*10+Math.random()*10,
       amount:Number(amountValue),
       description:descriptionValue,
       category:categoryValue
     }
-    dispatch(expenseActions.addExpense(item))
+    const token = localStorage.getItem('auth_token')
+    axios.post("http://localhost:8006/expenses/addexpense",item,{headers:{"Authorization":token}})
+    .then((data)=>{
+      dispatch(expenseActions.addExpense(data.data.newExpense))
+    })
+    .catch(()=>{
+      alert("Cannot add Expense")
+    })
+   
     
-    setExpenseId(0)
     setAmountValue('')
     setCategoryValue('')
     setDescriptionValue('')

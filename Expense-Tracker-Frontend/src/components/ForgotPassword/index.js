@@ -2,14 +2,33 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import {NavLink} from 'react-router-dom';
+import {NavLink , useHistory} from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import QuestionMarkRounded from '@mui/icons-material/QuestionMarkRounded';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import axios from 'axios';
 
 export default function ForgotPassword(){
+   const history = useHistory()
+  const handleSubmit = (event)=>{
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const info = {
+      email: data.get('email')
+    };
+
+    axios.post('http://localhost:8006/password/forgotpassword',info)
+    .then(()=>{
+      alert("Link Send")
+      history.push('/signin')
+    })
+    .catch((er)=>{
+      console.log(er)
+      alert("Error is sending Link")
+    })
+  }
     return(
         <Container component="main" maxWidth="xs" sx={{backgroundColor:'aliceblue',px:2,pb:2,borderRadius:1}}>
         <CssBaseline />
@@ -20,6 +39,9 @@ export default function ForgotPassword(){
             flexDirection: 'column',
             alignItems: 'center',
           }}
+          component="form"
+          noValidate
+          onSubmit={handleSubmit}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <QuestionMarkRounded />

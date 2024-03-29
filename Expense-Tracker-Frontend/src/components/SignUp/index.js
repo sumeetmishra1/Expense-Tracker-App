@@ -9,17 +9,29 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 
 export default function SignUp() {
+  const history = useHistory()
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const item = {
+      name:data.get('Name'),
       email: data.get('email'),
       password: data.get('password'),
-    });
+    };
+    axios.post("http://localhost:8006/user/signup",item)
+    .then((data)=>{
+      console.log(data)
+      alert("User Created")
+      history.push('/signin')
+    })
+    .catch((error)=>{
+     alert(error?.response.data.err||"error")
+    })
   };
 
   return (
