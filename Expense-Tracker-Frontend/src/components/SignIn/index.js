@@ -9,17 +9,31 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-
-
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { authActions } from '../../store/Auth';
+import { useHistory } from 'react-router-dom';
 
 export default function SignIn() {
+  const history  = useHistory()
+  const dispatch  = useDispatch()
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const info = {
       email: data.get('email'),
       password: data.get('password'),
-    });
+    };
+    axios.post("http://localhost:8006/user/login",info)
+    .then((data)=>{
+      alert(data.data.message)
+      localStorage.setItem('auth_token',data.data.token)
+      dispatch(authActions.login())
+      history.push('/')
+    })
+    .catch((e)=>{
+     alert(e.message)
+    })
   };
 
   return (

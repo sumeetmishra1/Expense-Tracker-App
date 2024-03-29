@@ -44,8 +44,8 @@ exports.getexpense=async(req,res,next)=>{
 exports.addexpense=async(req,res,next)=>{
     try{
     const price=Number(req.body.amount);
-    const description=req.body.descrip;
-    const category=req.body.catgory;
+    const description=req.body.description;
+    const category=req.body.category;
     const id=req.user._id;
     const oldexpense=req.user.totalExpense;
     const expense= new Expense({

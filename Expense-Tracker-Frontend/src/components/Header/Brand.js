@@ -8,14 +8,14 @@ import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/Auth";
+import { premiumActions } from "../../store/Premium";
 
 export function BrandName() {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const dispatch = useDispatch();
-
-  const totalAmount = useSelector((state) => state.expenses.totalAmount);
-
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+  const isPremium  = useSelector((state) =>state.premium.isPremium )
   const history = useHistory();
 
   const open = Boolean(anchorEl);
@@ -28,6 +28,10 @@ export function BrandName() {
     dispatch(authActions.logout());
     history.push("/");
   };
+
+  const handlePremiumClick = () =>{
+    dispatch(premiumActions.setIsPremium());
+  }
   
   return (
     <Box
@@ -47,18 +51,32 @@ export function BrandName() {
           Expense Tracker App
         </Typography>
       </Box>
-      {totalAmount > 10000 ? (
+      {isAuthenticated?
+      <>
+      { isPremium ? <Typography 
+            sx={{
+            mt:2,
+            mr: 8,
+            fontSize: 30,
+            color:"gold",
+            textTransform: "none",
+            fontFamily:"initial",}}>
+            Premium User <WorkspacePremiumIcon color="info" /> </Typography>
+      :
+      (
         <Button
           sx={{
             mr: 8,
             fontSize: 20,
             textTransform: "none",
             fontFamily: "serif",
+            
           }}
+          onClick={handlePremiumClick}
         >
           Buy Premium <WorkspacePremiumIcon />
         </Button>
-      ) : null}
+      ) }
       <MenuLogo sx={{ m: 2, fontSize: 30, ml: 8 }} onClick={handleClick} />
       <Menu
         id="basic-menu"
@@ -87,6 +105,9 @@ export function BrandName() {
         </MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
+      </>
+      :
+      null}
     </Box>
   );
 }

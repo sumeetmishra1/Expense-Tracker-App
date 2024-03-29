@@ -36,7 +36,7 @@ app.use((req, res) => {
 
 const DB_URL = process.env.DB_URL;
 mongoose.connect(DB_URL).then(() => {
-    app.listen(4000);
+    app.listen(8006);
     console.log('connected')
 })
  .catch(err => console.log(err));
