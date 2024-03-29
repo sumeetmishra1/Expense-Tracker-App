@@ -9,7 +9,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/Auth";
 import { premiumActions } from "../../store/Premium";
-
+import paymentPage from "../ExpensePage/RazorpayPage";
 export function BrandName() {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -30,7 +30,12 @@ export function BrandName() {
   };
 
   const handlePremiumClick = () =>{
-    dispatch(premiumActions.setIsPremium());
+    paymentPage((isError)=>{
+      console.log(isError)
+      if(!isError){
+        dispatch(premiumActions.setIsPremium(true))
+      }
+    })
   }
   
   return (
