@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Password</title>
+</head>
+<body>
+    <form action="" id="newpassword">
+        <label for="password">New Password:</label>
+        <input type="text" id="password">
+        <button type="submit">Create</button>
+    </form>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js"></script>
+<script>
+    document.querySelector('#newpassword').addEventListener('submit',(e)=>{
+        e.preventDefault();
+        const password=document.querySelector('#password');
+        const currUrl=(window.location.href).split('/');
+        const uuid=currUrl[currUrl.length-1];
+        let obj={
+            uuid:uuid,
+            password:password.value
+        }
+        axios.post('/password/setnewpassword',obj)
+        .then(res=>{
+            console.log(res);
+            alert("Password Succesfully changed")
+            window.location.href="/login/index.html";
+        })
+        .catch((err)=>{
+            alert(err.message)
+            console.log(err)});
+
+    })
+</script>
+</html>
