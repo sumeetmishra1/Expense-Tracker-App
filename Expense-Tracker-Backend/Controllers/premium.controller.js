@@ -1,5 +1,5 @@
 
-const User=require("../models/user");
+const User=require("../Models/user.model");
 
 exports.getleaderboard=async(req,res,next)=>{
     try{

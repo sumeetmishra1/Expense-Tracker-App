@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
 const resetLinkSchema = new Schema({
     id:{
         type:String,

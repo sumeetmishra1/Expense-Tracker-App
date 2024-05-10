@@ -1,4 +1,4 @@
-const User=require('../models/user');
+const User=require('../Models/user.model');
 const bcrypt=require('bcrypt');
 const jwt=require('jsonwebtoken');
 
@@ -6,6 +6,7 @@ const jwt=require('jsonwebtoken');
 function createToken(id,name){
     return jwt.sign({userId:id,name:name},process.env.JWT_SECRET_KEY)
 }
+
 exports.addNewUser = async(req,res,next)=>{
     const name=req.body.name;
     const email=req.body.email;
@@ -33,6 +34,7 @@ exports.addNewUser = async(req,res,next)=>{
         res.status(500).json(err);
     }  
 }
+
 exports.loginUser=async(req,res,next)=>{
     const email=req.body.email;
     const password=req.body.password;
