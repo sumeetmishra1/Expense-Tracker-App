@@ -1,6 +1,6 @@
 const express=require('express');
 const router=express.Router();
-const Authoriz=require('../Middleware/auth');
+const Authoriz=require('../Middleware/auth.js');
 const expensecontroller=require('../Controllers/expense.controller.js'); 
 
 router.post('/addexpense',Authoriz.authenticate,expensecontroller.addexpense);
