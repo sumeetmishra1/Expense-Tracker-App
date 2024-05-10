@@ -1,6 +1,7 @@
-const Order=require('../models/purchase');
-const User=require('../models/user');
+const Order=require('../Models/purchase.model');
+const User=require('../Models/user.model');
 const Razorpay=require('razorpay');
+
 exports.purchasepremium=async(req,res)=>{
     try{
         var rzp=new Razorpay({
@@ -32,6 +33,7 @@ exports.purchasepremium=async(req,res)=>{
         res.status(401).json({message:'Something went wrong',error:err});
     }
 }
+
 exports.updateTransactionstatus= async(req,res)=>{
     try{
         const{payment_id, order_id}=req.body;
